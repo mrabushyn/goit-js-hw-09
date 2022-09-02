@@ -59,8 +59,7 @@ function chooseDate(selectDateTime) {
   }
   if (timeInFuture) {
     refs.startBtn.disabled = false;
-    const ms = dateSelect - dateNow;
-    convertMs(ms);
+    convertMs(dateSelect - dateNow); // можна закоментувати
   }
   refs.startBtn.addEventListener('click', event => {
     timer.start(dateSelect);
@@ -100,15 +99,15 @@ const timer = {
     this.intervalId = setInterval(() => {
       const currentTine = Date.now();
       const timerTimeOn = dateSelect - currentTine;
-      console.log(timerTimeOn);
+      // console.log(timerTimeOn);
       convertMs(timerTimeOn);
       if (timerTimeOn < 1000) {
         console.log('YOU WIN $1 000 000');
         this.stop();
-        refs.daysField.textContent = 'TH';
-        refs.hoursField.textContent = 'E';
-        refs.minutesField.textContent = 'E';
-        refs.secondsField.textContent = 'ND';
+        refs.daysField.textContent = 'END';
+        refs.hoursField.textContent = 'OF';
+        refs.minutesField.textContent = 'SA';
+        refs.secondsField.textContent = 'LE';
       }
     }, 1000);
   },
