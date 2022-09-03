@@ -11,7 +11,9 @@ const refs = {
   secondsField: document.querySelector('.value[data-seconds]'),
 };
 
-refs.body.insertAdjacentHTML('beforebegin',   `<style>
+refs.body.insertAdjacentHTML(
+  'beforebegin',
+  `<style>
     .timer {
       display: flex;
     } 
@@ -29,15 +31,16 @@ refs.body.insertAdjacentHTML('beforebegin',   `<style>
       text-transform: uppercase;
       font-size: 12px;
     }
-  </style>)`);
-
+  </style>)`
+);
 
 const options = {
   enableTime: true, //Вмикає засіб вибору часу boolean - false
   time_24hr: true, //Відображає засіб вибору часу в 24-годинному режимі без вибору AM/PM, якщо ввімкнено.
   defaultDate: new Date(), // Встановлює початкові вибрані дати.  String
   minuteIncrement: 1, //Регулює крок для введення хвилин
-  onClose(selectedDates) { //Функції, які запускаються щоразу, коли календар закривається. Перегляньте Events API
+  onClose(selectedDates) {
+    //Функції, які запускаються щоразу, коли календар закривається. Перегляньте Events API
     const selectDateTime = new Date(selectedDates[0]);
     chooseDate(selectDateTime);
   },
@@ -45,7 +48,7 @@ const options = {
 
 flatpickr('input#datetime-picker', options);
 
-  refs.startBtn.disabled = true;
+refs.startBtn.disabled = true;
 
 function chooseDate(selectDateTime) {
   const dateNow = Date.now();
@@ -59,7 +62,7 @@ function chooseDate(selectDateTime) {
   }
   if (timeInFuture) {
     refs.startBtn.disabled = false;
-    convertMs(dateSelect - dateNow); // можна закоментувати
+    timer.convertMs(dateSelect - dateNow); // можна закоментувати
   }
   refs.startBtn.addEventListener('click', event => {
     timer.start(dateSelect);
@@ -70,37 +73,39 @@ function chooseDate(selectDateTime) {
   });
 }
 
-function addLeadingZero(value) {
-  return String(value).padStart(2, '0');
-}
+// function addLeadingZero(value) {
+//   return String(value).padStart(2, '0');
+// }
 
-function convertMs(ms) {
-  const second = 1000;
-  const minute = second * 60;
-  const hour = minute * 60;
-  const day = hour * 24;
-  const days = addLeadingZero(Math.floor(ms / day));
-  const hours = addLeadingZero(Math.floor((ms % day) / hour));
-  const minutes = addLeadingZero(Math.floor(((ms % day) % hour) / minute));
-  const seconds = addLeadingZero(
-    Math.floor((((ms % day) % hour) % minute) / second)
-  );
-  refs.daysField.textContent = days;
-  refs.hoursField.textContent = hours;
-  refs.minutesField.textContent = minutes;
-  refs.secondsField.textContent = seconds;
+// function convertMs(ms) {
+//   const second = 1000;
+//   const minute = second * 60;
+//   const hour = minute * 60;
+//   const day = hour * 24;
+//   const days = addLeadingZero(Math.floor(ms / day));
+//   const hours = addLeadingZero(Math.floor((ms % day) / hour));
+//   const minutes = addLeadingZero(Math.floor(((ms % day) % hour) / minute));
+//   const seconds = addLeadingZero(
+//     Math.floor((((ms % day) % hour) % minute) / second)
+//   );
+//   refs.daysField.textContent = days;
+//   refs.hoursField.textContent = hours;
+//   refs.minutesField.textContent = minutes;
+//   refs.secondsField.textContent = seconds;
 
-  return { days, hours, minutes, seconds };
-}
+//   return { days, hours, minutes, seconds };
+// }
 
-const timer = {
-  intervalId: null,
+class Timer {
+  constructor() {
+    this.intervalId = null;
+  }
   start(dateSelect) {
     this.intervalId = setInterval(() => {
       const currentTine = Date.now();
       const timerTimeOn = dateSelect - currentTine;
       // console.log(timerTimeOn);
-      convertMs(timerTimeOn);
+      this.convertMs(timerTimeOn);
       if (timerTimeOn < 1000) {
         console.log('YOU WIN $1 000 000');
         this.stop();
@@ -110,8 +115,57 @@ const timer = {
         refs.secondsField.textContent = 'LE';
       }
     }, 1000);
-  },
+  }
   stop() {
     clearInterval(this.intervalId);
-  },
-};
+  }
+  addLeadingZero(value) {
+    return String(value).padStart(2, '0');
+  }
+
+  convertMs(ms) {
+    const second = 1000;
+    const minute = second * 60;
+    const hour = minute * 60;
+    const day = hour * 24;
+    const days = this.addLeadingZero(Math.floor(ms / day));
+    const hours = this.addLeadingZero(Math.floor((ms % day) / hour));
+    const minutes = this.addLeadingZero(
+      Math.floor(((ms % day) % hour) / minute)
+    );
+    const seconds = this.addLeadingZero(
+      Math.floor((((ms % day) % hour) % minute) / second)
+    );
+    refs.daysField.textContent = days;
+    refs.hoursField.textContent = hours;
+    refs.minutesField.textContent = minutes;
+    refs.secondsField.textContent = seconds;
+
+    return { days, hours, minutes, seconds };
+  }
+}
+
+const timer = new Timer();
+
+// const timer = {
+//   intervalId: null,
+//   start(dateSelect) {
+//     this.intervalId = setInterval(() => {
+//       const currentTine = Date.now();
+//       const timerTimeOn = dateSelect - currentTine;
+//       // console.log(timerTimeOn);
+//       convertMs(timerTimeOn);
+//       if (timerTimeOn < 1000) {
+//         console.log('YOU WIN $1 000 000');
+//         this.stop();
+//         refs.daysField.textContent = 'END';
+//         refs.hoursField.textContent = 'OF';
+//         refs.minutesField.textContent = 'SA';
+//         refs.secondsField.textContent = 'LE';
+//       }
+//     }, 1000);
+//   },
+//   stop() {
+//     clearInterval(this.intervalId);
+//   },
+// };
