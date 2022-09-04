@@ -1,25 +1,30 @@
-
-
-// console.log(amount);
-
-
-
-
-const firstDelay = document.querySelector("input[name=delay]")
+const input = document.querySelector('input');
+const firstDelay = document.querySelector('input[name=delay]');
 const delayStep = document.querySelector('input[name=step]');
 const amount = document.querySelector('input[name=amount]');
+const BtnCreatePromise = document.querySelector('button');
 
 
+  console.log(firstDelay.dataset.value);
+  console.log(delayStep.textContent);
 
-const BtnCreatePromise = document.querySelector('button[type=submit]');
-console.log(BtnCreatePromise);
+  
+BtnCreatePromise.addEventListener('click', onSubmitBtn);
+input.addEventListener('input', onSubmitBtn);
+
+function onSubmitBtn(event) {
+  event.preventDefault();
+
+
+}
 
 function createPromise(position, delay) {
   return new Promise((resolve, reject) => {
     const shouldResolve = Math.random() > 0.3;
+
     setTimeout(() => {
       if (shouldResolve) {
-        resolve('esssss' + " " + `${position}`);
+        resolve('esssss' + ' ' + `${position}`);
       } else {
         reject('nooooo');
       }
@@ -32,41 +37,20 @@ function onSecces(result) {
 }
 
 function onError(error) {
-  console.log("error");
   console.log(error);
 }
 
-BtnCreatePromise.addEventListener("submit", onSubmit)
+const intervalId = setInterval(() => {
+  createPromise(2, firstDelay).then(onSecces).catch(onError);
+}, delayStep);
 
-function onSubmit(evt) {
-  
+// console.log(event);
+// const totalTime =
+//   (firstDelay.textContent + delayStep.textContent) * amount.textContent;
+// console.log(firstDelay.textContent);
+// console.log(totalTime);
 
-  evt.preventDefault();
-console.log(evt);
-  const totalTime = (firstDelay.textContent + delayStep.textContent) * amount.textContent
-  console.log(firstDelay.textContent);
-
-  const intervalId = setInterval(() => {
-    createPromise(2, firstDelay).then(onSecces).catch(onError);
-  }, delayStep);
-
-  clearInterval(intervalId);
-}
-
-
-
-
-
-// if (amount > 4) {
-
-// }
-
-
-
-
-
-
-
+clearInterval(intervalId);
 
 // const fetchUserFromServer = username => {
 //   return new Promise((resolve, reject) => {
