@@ -1,96 +1,40 @@
-const input = document.querySelector('input');
-const firstDelay = document.querySelector('input[name=delay]');
-const delayStep = document.querySelector('input[name=step]');
-const amount = document.querySelector('input[name=amount]');
-const BtnCreatePromise = document.querySelector('button');
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
+const form = document.querySelector('.form');
+const formDelay = document.querySelector('input[name="delay"]');
+const formStep = document.querySelector('input[name="step"]');
+const formAmount = document.querySelector('input[name="amount"]');
 
-  console.log(firstDelay.dataset.value);
-  console.log(delayStep.textContent);
-
-  
-BtnCreatePromise.addEventListener('click', onSubmitBtn);
-input.addEventListener('input', onSubmitBtn);
-
-function onSubmitBtn(event) {
-  event.preventDefault();
-
-
-}
-
-function createPromise(position, delay) {
+const createPromise = (position, firstDelay) => {
   return new Promise((resolve, reject) => {
     const shouldResolve = Math.random() > 0.3;
-
     setTimeout(() => {
       if (shouldResolve) {
-        resolve('esssss' + ' ' + `${position}`);
-      } else {
-        reject('nooooo');
+        resolve({ position, firstDelay });
       }
-    }, delay);
+      reject({ position, firstDelay });
+    }, firstDelay);
   });
+};
+
+form.addEventListener('submit', event => {
+  event.preventDefault();
+
+  let firstDelay = Number(formDelay.value);
+  let delayStep = Number(formStep.value);
+  let amount = Number(formAmount.value);
+
+  for (let i = 1; i <= amount; i += 1) {
+    createPromise(i, firstDelay).then(onSuccess).catch(onError);
+    firstDelay += delayStep}
+
+function onSuccess ({ position, firstDelay }) {
+Notify.success(`Fulfilled promise ${position} in ${firstDelay} ms`);
+}
+function onError({ position, firstDelay }) {
+  Notify.failure(`Rejected promise ${position} in ${firstDelay} ms`);
 }
 
-function onSecces(result) {
-  console.log(result);
-}
+});
 
-function onError(error) {
-  console.log(error);
-}
 
-const intervalId = setInterval(() => {
-  createPromise(2, firstDelay).then(onSecces).catch(onError);
-}, delayStep);
-
-// console.log(event);
-// const totalTime =
-//   (firstDelay.textContent + delayStep.textContent) * amount.textContent;
-// console.log(firstDelay.textContent);
-// console.log(totalTime);
-
-clearInterval(intervalId);
-
-// const fetchUserFromServer = username => {
-//   return new Promise((resolve, reject) => {
-//     console.log(`Fetching data for ${username}`);
-
-//     setTimeout(() => {
-//       // Change value of isSuccess variable to simulate request status
-//       const isSuccess = false;
-
-//       if (isSuccess) {
-//         resolve('success value');
-//       } else {
-//         reject('Errrrror');
-//       }
-//     }, 2000);
-//   });
-// };
-//     console.log(Promise);
-
-// fetchUserFromServer('Mango')
-//   .then(o => console.log(o))
-//   .catch(er => console.log(er));
-
-// function onSecces (result) {
-// console.log("Allright")
-// }
-
-// function onError (error) {
-//   console.log("Error")
-// }
-
-// const makePromise = (text, delay) => {
-//   return new Promise(resolve => {
-//     setTimeout(() => resolve(text), delay);
-//   });
-// };
-
-// const promiseA = makePromise('promiseA value', 3000);
-// const promiseB = makePromise('promiseB value', 3000);
-
-// Promise.race([promiseA, promiseB])
-//   .then(value => console.log(value)) // "promiseA value"
-//   .catch(error => console.log(error));

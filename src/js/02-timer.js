@@ -1,3 +1,5 @@
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
@@ -57,7 +59,7 @@ function chooseDate(selectDateTime) {
   const timeInFuture = dateSelect - dateNow > 0;
   if (timeInPast) {
     refs.startBtn.disabled = true;
-    window.alert('Please, choose a date in the future');
+    Notify.failure('Please, choose a date in the future');
     return;
   }
   if (timeInFuture) {
@@ -107,7 +109,7 @@ class Timer {
       // console.log(timerTimeOn);
       this.convertMs(timerTimeOn);
       if (timerTimeOn < 1000) {
-        console.log('YOU WIN $1 000 000');
+        Notify.success('YOU WIN $1 000 000');
         this.stop();
         refs.daysField.textContent = 'END';
         refs.hoursField.textContent = 'OF';
