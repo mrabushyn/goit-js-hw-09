@@ -17,6 +17,14 @@ const createPromise = (position, firstDelay) => {
   });
 };
 
+  function onSuccess({ position, firstDelay }) {
+    Notify.success(`Fulfilled promise ${position} in ${firstDelay} ms`);
+  }
+
+  function onError({ position, firstDelay }) {
+    Notify.failure(`Rejected promise ${position} in ${firstDelay} ms`);
+  }
+  
 form.addEventListener('submit', event => {
   event.preventDefault();
 
@@ -26,15 +34,8 @@ form.addEventListener('submit', event => {
 
   for (let i = 1; i <= amount; i += 1) {
     createPromise(i, firstDelay).then(onSuccess).catch(onError);
-    firstDelay += delayStep}
-
-function onSuccess ({ position, firstDelay }) {
-Notify.success(`Fulfilled promise ${position} in ${firstDelay} ms`);
-}
-function onError({ position, firstDelay }) {
-  Notify.failure(`Rejected promise ${position} in ${firstDelay} ms`);
-}
-
+    firstDelay += delayStep;
+  }
 });
 
 
