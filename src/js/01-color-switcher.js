@@ -7,17 +7,15 @@ let intervalId = null;
 
 refs.startBtn.addEventListener('click', onDiscoStart);
 refs.stopBtn.addEventListener('click', onDiscoStop);
-
+refs.stopBtn.classList.toggle('is-hidden');
 function onDiscoStop() {
   clearInterval(intervalId);
-  refs.startBtn.disabled = false;
-  refs.stopBtn.disabled = true;
+  changeClass();
 }
 
 function onDiscoStart() {
   intervalId = setInterval(setColorToStyle, 1000);
-  refs.startBtn.disabled = true;
-  refs.stopBtn.disabled = false;
+  changeClass();
 }
 
 function setColorToStyle() {
@@ -26,4 +24,9 @@ function setColorToStyle() {
 
 function getRandomHexColor() {
   return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+}
+
+function changeClass() {
+  refs.startBtn.classList.toggle("is-hidden");
+  refs.stopBtn.classList.toggle('is-hidden');
 }
