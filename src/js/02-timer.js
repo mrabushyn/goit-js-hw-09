@@ -111,10 +111,7 @@ class Timer {
       if (timerTimeOn < 1000) {
         Notify.success('YOU WIN $1 000 000');
         this.stop();
-        refs.daysField.textContent = 'END';
-        refs.hoursField.textContent = 'OF';
-        refs.minutesField.textContent = 'SA';
-        refs.secondsField.textContent = 'LE';
+        textContent('END', 'OF', 'SA', 'LE');
       }
     }, 1000);
   }
@@ -138,13 +135,17 @@ class Timer {
     const seconds = this.addLeadingZero(
       Math.floor((((ms % day) % hour) % minute) / second)
     );
-    refs.daysField.textContent = days;
-    refs.hoursField.textContent = hours;
-    refs.minutesField.textContent = minutes;
-    refs.secondsField.textContent = seconds;
+    textContent(days, hours, minutes, seconds);
 
     return { days, hours, minutes, seconds };
   }
+}
+
+function textContent(days, hours, minutes, seconds) {
+  refs.daysField.textContent = `${days}`;
+  refs.hoursField.textContent = `${hours}`;
+  refs.minutesField.textContent = `${minutes}`;
+  refs.secondsField.textContent = `${seconds}`;
 }
 
 const timer = new Timer();
